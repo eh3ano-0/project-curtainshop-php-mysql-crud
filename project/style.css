@@ -1,0 +1,440 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+    direction: rtl;
+}
+
+body {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: linear-gradient(180deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+    padding: 25px;
+    transition: width 0.3s ease;
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.sidebar h3 {
+    text-align: center;
+    margin-bottom: 35px;
+    font-size: 1.4em;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    padding: 12px 15px;
+    border-radius: 10px;
+    color: #ecf0f1;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffeaa7;
+    transform: translateX(5px);
+}
+
+.sidebar ul li a i {
+    margin-left: 12px;
+    font-size: 1.3em;
+    transition: transform 0.3s ease;
+}
+
+.sidebar ul li a:hover i {
+    transform: rotate(10deg);
+}
+
+.container {
+    background: #ffffff;
+    margin-left: 250px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 35px;
+    max-width: 1000px;
+    width: 100%;
+    transition: all 0.3s ease;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.container:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+    border: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #ff758c;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(255, 117, 140, 0.3);
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.icon-btn i {
+    font-size: 1.3em;
+    transition: color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #55efc4;
+}
+
+.edit-btn:hover {
+    background-color: #00b894;
+    transform: scale(1.15);
+}
+
+.delete-btn {
+    background-color: #fab1a0;
+}
+
+.delete-btn:hover {
+    background-color: #e17055;
+    transform: scale(1.15);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.modal-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+    z-index: 1001;
+    display: none;
+    max-width: 450px;
+    width: 95%;
+    animation: popIn 0.5s ease forwards;
+    color: #fff;
+}
+
+.modal.active {
+    display: block;
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.modal h2 {
+    margin-bottom: 25px;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.modal form input, .modal form select {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+.modal form input:focus, .modal form select:focus {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.modal form button {
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #ff9ff3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.modal form button:hover {
+    background-color: #f368e0;
+    transform: translateY(-2px);
+}
+
+.modal form .cancel-btn {
+    background-color: #ff7675;
+}
+
+.modal form .cancel-btn:hover {
+    background-color: #d63031;
+}
+
+.table {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    margin-top: 20px;
+}
+
+.table th {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+}
+
+.table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background: #ffeaa7;
+    transition: background 0.3s ease;
+}
+
+/* سبک جدید برای جستجو */
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    transition: border 0.3s ease;
+}
+
+.search-input:focus {
+    border: 1px solid #ff9a9e;
+    outline: none;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9); /* نیمه‌شفاف برای دیدن محتوا زیر اگر بخوای */
+    z-index: 9999;
+    overflow: hidden;
+    display: block; /* همیشه visible موقع لود */
+    transition: opacity 0.5s ease;
+}
+
+.curtain {
+    width: 50%;
+    height: 100%;
+    float: left;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.curtain-left {
+    animation-name: go-left;
+}
+
+.curtain-right {
+    animation-name: go-right;
+}
+
+@keyframes go-left {
+    0% {
+        transform: translate(0%, 0%);
+    }
+    100% {
+        transform: translate(-70%, 0%);
+    }
+}
+
+@keyframes go-right {
+    0% {
+        transform: translate(0%, 0%);
+    }
+    100% {
+        transform: translate(70%, 0%);
+    }
+}
+
+.curtain-element {
+    width: 10%;
+    height: 100%;
+    float: left;
+    border-bottom-right-radius: 67px;
+    border-bottom-left-radius: 67px;
+}
+
+/* رنگ‌های alternating برای شبیه پرده قرمز */
+.curtain-element:nth-child(odd) {
+    background-color: #ba0f0f;
+}
+
+.curtain-element:nth-child(even) {
+    background-color: #d72525;
+}
+
+
+/* استایل overlay برای تمام صفحه کردن لودینگ */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* نیمه‌شفاف برای دیدن محتوا زیر اگر بخوای، یا solid برای کامل پوشاندن */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+    opacity: 1;
+}
+
+/* CSS loader که پیدا کردی – بدون تغییر عمده */
+.loader {
+    transform: rotateZ(45deg);
+    perspective: 1000px;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    color: #fff;
+}
+
+.loader:before,
+.loader:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
+    transform: rotateX(70deg);
+    animation: 1s spin linear infinite;
+}
+
+.loader:after {
+    color: #FF3D00; /* می‌تونی به #fda085 تغییر بدی برای هماهنگی با background بدن */
+    transform: rotateY(70deg);
+    animation-delay: .4s;
+}
+
+@keyframes rotate {
+    0% {
+        transform: translate(-50%, -50%) rotateZ(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotateZ(360deg);
+    }
+}
+
+@keyframes rotateccw {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(-360deg);
+    }
+}
+
+@keyframes spin {
+    0%,
+    100% {
+        box-shadow: .2em 0px 0 0px currentcolor;
+    }
+    12% {
+        box-shadow: .2em .2em 0 0 currentcolor;
+    }
+    25% {
+        box-shadow: 0 .2em 0 0px currentcolor;
+    }
+    37% {
+        box-shadow: -.2em .2em 0 0 currentcolor;
+    }
+    50% {
+        box-shadow: -.2em 0 0 0 currentcolor;
+    }
+    62% {
+        box-shadow: -.2em -.2em 0 0 currentcolor;
+    }
+    75% {
+        box-shadow: 0px -.2em 0 0 currentcolor;
+    }
+    87% {
+        box-shadow: .2em -.2em 0 0 currentcolor;
+    }
+}

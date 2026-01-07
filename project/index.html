@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرده‌سرا | سیستم مدیریت پرده‌فروشی</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A962;
+            --gold-light: #E8D5A3;
+            --burgundy: #722F37;
+            --burgundy-dark: #4A1F24;
+            --cream: #FDF8F0;
+            --dark: #1A1A1A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--cream);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Curtain Animation Overlay */
+        .curtain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            pointer-events: none;
+        }
+
+        .curtain-left, .curtain-right {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            position: relative;
+            animation: curtainOpen 2s ease-in-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        .curtain-left {
+            transform-origin: left;
+        }
+
+        .curtain-right {
+            transform-origin: right;
+        }
+
+        .curtain-left::before, .curtain-right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 30px,
+                rgba(255,255,255,0.03) 30px,
+                rgba(255,255,255,0.03) 60px
+            );
+        }
+
+        .curtain-drape {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes curtainOpen {
+            0% { transform: scaleX(1); }
+            100% { transform: scaleX(0); }
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201, 169, 98, 0.2);
+            padding: 1rem 0;
+            transition: all 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--burgundy) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand i {
+            color: var(--gold);
+            font-size: 2rem;
+        }
+
+        .nav-link {
+            color: var(--dark) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--burgundy) !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 150%;
+            background: radial-gradient(ellipse, rgba(201, 169, 98, 0.15) 0%, transparent 70%);
+            animation: floatBg 15s ease-in-out infinite;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, 30px) rotate(5deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            color: var(--dark);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            display: block;
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #666;
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 2.5s;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 2.8s;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary-custom:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(114, 47, 55, 0.4);
+            color: white;
+        }
+
+        .btn-outline-custom {
+            background: transparent;
+            border: 2px solid var(--gold);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--gold);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Curtain Visual */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .curtain-visual {
+            position: relative;
+            width: 350px;
+            height: 450px;
+            perspective: 1000px;
+        }
+
+        .curtain-rod {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 20px;
+            background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-light) 100%);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(201, 169, 98, 0.5);
+            z-index: 10;
+        }
+
+        .curtain-rod::before, .curtain-rod::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--gold);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .curtain-rod::before { left: -15px; }
+        .curtain-rod::after { right: -15px; }
+
+        .curtain-fabric {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            height: calc(100% - 20px);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .fabric-panel {
+            flex: 1;
+            background: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+            position: relative;
+            transform-origin: top;
+            animation: fabricWave 4s ease-in-out infinite;
+            box-shadow: inset -20px 0 40px rgba(0,0,0,0.3), inset 20px 0 40px rgba(255,255,255,0.1);
+        }
+
+        .fabric-panel:nth-child(1) { animation-delay: 0s; }
+        .fabric-panel:nth-child(2) { animation-delay: 0.2s; }
+        .fabric-panel:nth-child(3) { animation-delay: 0.4s; }
+        .fabric-panel:nth-child(4) { animation-delay: 0.6s; }
+        .fabric-panel:nth-child(5) { animation-delay: 0.8s; }
+
+        .fabric-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                180deg,
+                transparent,
+                transparent 20px,
+                rgba(255,255,255,0.02) 20px,
+                rgba(255,255,255,0.02) 40px
+            );
+        }
+
+        @keyframes fabricWave {
+            0%, 100% { transform: skewX(0deg) scaleY(1); }
+            25% { transform: skewX(1deg) scaleY(1.01); }
+            75% { transform: skewX(-1deg) scaleY(0.99); }
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element.fe-1 {
+            top: 10%;
+            right: 10%;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            color: white;
+            animation-delay: 0s;
+        }
+
+        .floating-element.fe-2 {
+            bottom: 20%;
+            right: 5%;
+            background: white;
+            color: var(--burgundy);
+            animation-delay: 1s;
+        }
+
+        .floating-element.fe-3 {
+            top: 30%;
+            left: 5%;
+            background: var(--burgundy);
+            color: white;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 4rem 0;
+            background: white;
+            position: relative;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Management Cards Section */
+        .management-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, var(--cream) 0%, white 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .management-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(201, 169, 98, 0.1);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .management-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--burgundy), var(--gold));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .management-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .management-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(114, 47, 55, 0.15);
+        }
+
+        .card-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            transition: all 0.5s ease;
+        }
+
+        .management-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-icon.employees {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            color: #2E7D32;
+        }
+
+        .card-icon.customers {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            color: #1565C0;
+        }
+
+        .card-icon.orders {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            color: #E65100;
+        }
+
+        .card-icon.curtains {
+            background: linear-gradient(135deg, #FCE4EC 0%, #F8BBD9 100%);
+            color: var(--burgundy);
+        }
+
+        .card-icon.payments {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            color: #7B1FA2;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-description {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--burgundy);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .card-link i {
+            transition: transform 0.3s;
+        }
+
+        .management-card:hover .card-link i {
+            transform: translateX(-5px);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 0;
+            background: var(--burgundy-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(201, 169, 98, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-text {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            padding: 4rem 0 2rem;
+            color: white;
+        }
+
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand i {
+            color: var(--gold);
+        }
+
+        .footer-text {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links h5 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links ul li a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--gold);
+            padding-right: 10px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: particleFloat 20s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .curtain-visual {
+                width: 250px;
+                height: 350px;
+            }
+
+            .floating-element {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Curtain Opening Animation -->
+    <div class="curtain-overlay">
+        <div class="curtain-left">
+            <div class="curtain-drape"></div>
+        </div>
+        <div class="curtain-right">
+            <div class="curtain-drape"></div>
+        </div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-grid-1x2-fill"></i>
+                پرده‌سرا
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">خانه</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#management">مدیریت</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">امکانات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">تماس</a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a href="person.php" class="btn btn-outline-custom">ورود</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            مدیریت هوشمند
+                            <span>پرده‌فروشی شما</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            سیستم یکپارچه مدیریت پرده‌فروشی با امکانات پیشرفته برای ثبت سفارشات، 
+                            مدیریت مشتریان، کارمندان و حسابداری. کسب‌وکار خود را متحول کنید!
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="#management" class="btn btn-primary-custom">
+                                <i class="bi bi-rocket-takeoff-fill me-2"></i>
+                                شروع کنید
+                            </a>
+                            <a href="#features" class="btn btn-outline-custom">
+                                <i class="bi bi-play-circle-fill me-2"></i>
+                                مشاهده امکانات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-visual">
+                        <div class="curtain-visual">
+                            <div class="curtain-rod"></div>
+                            <div class="curtain-fabric">
+                                <div class="fabric-panel"></div>
+                                <div class="fabric-panel"></div>
+                                <div class="fabric-panel"></div>
+                                <div class="fabric-panel"></div>
+                                <div class="fabric-panel"></div>
+                            </div>
+                        </div>
+                        <div class="floating-element fe-1">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <div class="floating-element fe-2">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="floating-element fe-3">
+                            <i class="bi bi-box-seam-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card reveal">
+                        <div class="stat-number" data-target="800">0</div>
+                        <div class="stat-label">مشتری فعال</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card reveal">
+                        <div class="stat-number" data-target="1700">0</div>
+                        <div class="stat-label">سفارش موفق</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card reveal">
+                        <div class="stat-number" data-target="70">0</div>
+                        <div class="stat-label">مدل پرده</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card reveal">
+                        <div class="stat-number" data-target="99">0</div>
+                        <div class="stat-label">% رضایت</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Management Cards Section -->
+    <section class="management-section" id="management">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-badge">
+                    <i class="bi bi-gear-fill me-2"></i>
+                    پنل مدیریت
+                </span>
+                <h2 class="section-title">بخش‌های سیستم مدیریت</h2>
+                <p class="section-subtitle">
+                    با استفاده از ماژول‌های یکپارچه، تمام جنبه‌های کسب‌وکار پرده‌فروشی خود را مدیریت کنید
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <a href="employee.php" class="management-card reveal">
+                        <div class="card-icon employees">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                        <h3 class="card-title">مدیریت کارمندان</h3>
+                        <p class="card-description">
+                            ثبت اطلاعات کارکنان، ساعات کاری، حقوق و دستمزد و ارزیابی عملکرد
+                        </p>
+                        <span class="card-link">
+                            ورود به بخش
+                            <i class="bi bi-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <a href="customer.php" class="management-card reveal">
+                        <div class="card-icon customers">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h3 class="card-title">مدیریت مشتریان</h3>
+                        <p class="card-description">
+                            بانک اطلاعاتی مشتریان، تاریخچه خرید، اعتبارسنجی و برنامه وفاداری
+                        </p>
+                        <span class="card-link">
+                            ورود به بخش
+                            <i class="bi bi-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <a href="order.php" class="management-card reveal">
+                        <div class="card-icon orders">
+                            <i class="bi bi-clipboard-check-fill"></i>
+                        </div>
+                        <h3 class="card-title">مدیریت سفارشات</h3>
+                        <p class="card-description">
+                            ثبت و پیگیری سفارش، وضعیت تولید، زمان‌بندی نصب و تحویل
+                        </p>
+                        <span class="card-link">
+                            ورود به بخش
+                            <i class="bi bi-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="col-lg-6 col-md-6">
+                    <a href="curtain.php" class="management-card reveal">
+                        <div class="card-icon curtains">
+                            <i class="bi bi-grid-1x2-fill"></i>
+                        </div>
+                        <h3 class="card-title">مدیریت پرده‌ها</h3>
+                        <p class="card-description">
+                            کاتالوگ محصولات، انواع پارچه، رنگ‌ها، سایزها، قیمت‌گذاری و موجودی انبار
+                        </p>
+                        <span class="card-link">
+                            ورود به بخش
+                            <i class="bi bi-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="col-lg-6">
+                    <a href="payment.php" class="management-card reveal">
+                        <div class="card-icon payments">
+                            <i class="bi bi-credit-card-2-front-fill"></i>
+                        </div>
+                        <h3 class="card-title">مدیریت پرداخت‌ها</h3>
+                        <p class="card-description">
+                            حسابداری، فاکتور، پرداخت اقساطی، گزارشات مالی و صورت‌حساب مشتریان
+                        </p>
+                        <span class="card-link">
+                            ورود به بخش
+                            <i class="bi bi-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container position-relative">
+            <div class="section-header reveal" style="color: white;">
+                <span class="section-badge">
+                    <i class="bi bi-stars me-2"></i>
+                    ویژگی‌ها
+                </span>
+                <h2 class="section-title" style="color: white;">چرا پرده‌سرا؟</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.7);">
+                    امکانات منحصر به فرد برای مدیریت حرفه‌ای کسب‌وکار شما
+                </p>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="feature-item reveal">
+                        <div class="feature-icon">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+                        <h4 class="feature-title">سرعت بالا</h4>
+                        <p class="feature-text">
+                            پردازش سریع اطلاعات و دسترسی آنی به تمام بخش‌ها
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item reveal">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h4 class="feature-title">امنیت بالا</h4>
+                        <p class="feature-text">
+                            رمزنگاری اطلاعات و سطوح دسترسی متنوع برای کاربران
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item reveal">
+                        <div class="feature-icon">
+                            <i class="bi bi-phone-fill"></i>
+                        </div>
+                        <h4 class="feature-title">طراحی واکنش‌گرا</h4>
+                        <p class="feature-text">
+                            دسترسی از هر دستگاهی با تجربه کاربری یکسان
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item reveal">
+                        <div class="feature-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h4 class="feature-title">گزارش‌گیری</h4>
+                        <p class="feature-text">
+                            نمودارها و گزارشات تحلیلی برای تصمیم‌گیری بهتر
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item reveal">
+                        <div class="feature-icon">
+                            <i class="bi bi-cloud-check-fill"></i>
+                        </div>
+                        <h4 class="feature-title">ذخیره ابری</h4>
+                        <p class="feature-text">
+                            پشتیبان‌گیری خودکار و دسترسی از هر نقطه
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item reveal">
+                        <div class="feature-icon">
+                            <i class="bi bi-headset"></i>
+                        </div>
+                        <h4 class="feature-title">پشتیبانی ۲۴/۷</h4>
+                        <p class="feature-text">
+                            تیم پشتیبانی همیشه آماده پاسخگویی
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-brand">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        پرده‌سرا
+                    </div>
+                    <p class="footer-text">
+                        سیستم جامع مدیریت پرده‌فروشی برای ارتقای کسب‌وکار شما. 
+                        با ما تجربه‌ای نوین از مدیریت حرفه‌ای داشته باشید.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="me-3 text-white-50"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="me-3 text-white-50"><i class="bi bi-telegram fs-5"></i></a>
+                        <a href="#" class="me-3 text-white-50"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 footer-links">
+                    <h5>دسترسی سریع</h5>
+                    <ul>
+                        <li><a href="#home">خانه</a></li>
+                        <li><a href="#management">مدیریت</a></li>
+                        <li><a href="#features">امکانات</a></li>
+                        <li><a href="#contact">تماس</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 footer-links">
+                    <h5>بخش‌های مدیریت</h5>
+                    <ul>
+                        <li><a href="employee.php">کارمندان</a></li>
+                        <li><a href="customer.php">مشتریان</a></li>
+                        <li><a href="order.php">سفارشات</a></li>
+                        <li><a href="curtain.php">پرده‌ها</a></li>
+                        <li><a href="payment.php">پرداخت‌ها</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 footer-links">
+                    <h5>تماس با ما</h5>
+                    <ul>
+                        <li><i class="bi bi-telephone-fill me-2 text-gold"></i> ۰۲۱-۱۲۳۴۵۶۷۸</li>
+                        <li><i class="bi bi-envelope-fill me-2 text-gold"></i> info@pardeh.ir</li>
+                        <li><i class="bi bi-geo-alt-fill me-2 text-gold"></i>قاین ، پرده فروشی جاهد</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="mb-0">
+                    © ۱۴۰۴ پرده‌سرا. تمامی حقوق محفوظ است.
+                    <span class="mx-2">|</span>
+                    طراحی با <i class="bi bi-heart-fill text-danger"></i> برای شما
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.width = (Math.random() * 8 + 4) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Scroll reveal animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.ceil(current).toLocaleString('fa-IR');
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString('fa-IR');
+                    }
+                };
+                
+                // Start counter when element is visible
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        updateCounter();
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.5 });
+                
+                observer.observe(counter);
+            });
+        }
+        animateCounters();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Remove curtain overlay after animation
+        setTimeout(() => {
+            document.querySelector('.curtain-overlay').style.display = 'none';
+        }, 3000);
+    </script>
+</body>
+</html>

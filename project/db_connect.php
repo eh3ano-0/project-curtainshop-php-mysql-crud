@@ -1,8 +1,9 @@
+<!-- db_connect.php -->
 <?php
 $servername = "localhost"; // آدرس سرور
-$username = ""; // نام کاربری MySQL
+$username = "root"; // نام کاربری MySQL
 $password = ""; // رمز عبور
-$dbname = "database"; // نام پایگاه داده
+$dbname = "curtainDB"; // نام پایگاه داده
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
