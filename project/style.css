@@ -438,3 +438,87 @@ body {
         box-shadow: .2em -.2em 0 0 currentcolor;
     }
 }
+
+/* ===== Fancy Home Button ===== */
+.home-btn {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 22px;
+    border-radius: 50px;
+
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 15px;
+    text-decoration: none;
+    color: #fff;
+
+    background: rgba(0, 123, 255, 0.25);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.2);
+
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+/* آیکون */
+.home-btn i {
+    font-size: 18px;
+    transition: transform 0.4s ease;
+}
+
+/* Hover حرفه‌ای */
+.home-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(0, 123, 255, 0.7);
+    background: linear-gradient(45deg, #007bff, #00d4ff);
+}
+
+/* چرخش آیکون */
+.home-btn:hover i {
+    transform: rotate(-15deg) scale(1.2);
+}
+
+/* نور متحرک روی دکمه */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.5),
+        transparent
+    );
+    transform: skewX(-25deg);
+    transition: 0.7s;
+}
+
+.home-btn:hover::before {
+    left: 130%;
+}
+
+/* افکت کلیک (Ripple) */
+.home-btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}

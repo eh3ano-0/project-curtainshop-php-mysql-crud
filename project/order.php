@@ -159,6 +159,12 @@ if ($result) {
 </head>
 <body>
 
+<!-- Home Button -->
+<a href="http://localhost/jahed/index.html" class="home-btn" id="homeBtn">
+    <i class="fas fa-home"></i>
+    <span>صفحه اصلی</span>
+</a>
+
 <!--برای لودینگ-->
 <div id="loading" class="loading-overlay">
     <span class="loader"></span>
@@ -452,7 +458,21 @@ if ($result) {
         document.getElementById('toggle-add-form').textContent = 'اضافه کردن سفارش';
     });
 
+    // دکمه خونه
+    document.getElementById("homeBtn").addEventListener("click", function(e){
+        let ripple = document.createElement("span");
+        ripple.classList.add("ripple");
 
+        let rect = this.getBoundingClientRect();
+        ripple.style.left = (e.clientX - rect.left) + "px";
+        ripple.style.top = (e.clientY - rect.top) + "px";
+
+        this.appendChild(ripple);
+
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
 </script>
 <script src="script.js"></script>
 </body>

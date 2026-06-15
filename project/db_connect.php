@@ -3,7 +3,7 @@
 $servername = "localhost"; // آدرس سرور
 $username = "root"; // نام کاربری MySQL
 $password = ""; // رمز عبور
-$dbname = "curtainDB"; // نام پایگاه داده
+$dbname = "curtaindb"; // نام پایگاه داده
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

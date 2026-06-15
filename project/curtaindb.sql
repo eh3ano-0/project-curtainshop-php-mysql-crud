@@ -250,10 +250,6 @@ CREATE TABLE `curtain` (
 -- Dumping data for table `curtain`
 --
 
-INSERT DELAYED IGNORE INTO `curtain` (`CurtainID`, `Type`, `Color`, `Material`, `Dimensions`, `Price`) VALUES
-(12, 'کرکره ای', 'قرمز', 'یشمی', '4 در 3', 240),
-(58, 'پارچه ای', 'سیاه', 'کنافی', '4 در 2', 120),
-(78, 'زبرا', 'سبز', 'کاغذی', '4 در 5', 200);
 
 -- --------------------------------------------------------
 
@@ -272,8 +268,7 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT DELAYED IGNORE INTO `customer` (`CustomerID`, `Address`, `JoinDate`) VALUES
-(1234567890, 'قاین میدان شیرازی', '2025-12-12');
+
 
 -- --------------------------------------------------------
 
@@ -292,8 +287,7 @@ CREATE TABLE `employee` (
 -- Dumping data for table `employee`
 --
 
-INSERT DELAYED IGNORE INTO `employee` (`EmployeeID`, `Role`, `Salary`) VALUES
-(1111111111, 'کارمند اداری', 22);
+
 
 -- --------------------------------------------------------
 
@@ -342,10 +336,7 @@ CREATE TABLE `person` (
 -- Dumping data for table `person`
 --
 
-INSERT DELAYED IGNORE INTO `person` (`PersonID`, `FirstName`, `LastName`, `PhoneNumber`, `Email`) VALUES
-(1111111111, 'محمد', 'محمدی', '09123412342', 'mo@gmail.com'),
-(1234567890, 'ابراهیم', 'ابراهیمی', '09523456789', 'ds@gmail.com'),
-(2147483647, 'رضا', 'رضایی', '09987654321', 'rz@gmail.com');
+
 
 -- --------------------------------------------------------
 
@@ -365,9 +356,7 @@ CREATE TABLE `peyment` (
 -- Dumping data for table `peyment`
 --
 
-INSERT DELAYED IGNORE INTO `peyment` (`PeymentID`, `Type`, `Amount`, `Description`) VALUES
-(2802, 'حضوری', 1600, 'حضوری'),
-(7800, 'اینترنتی', 2500, 'اینترنتی');
+
 
 --
 -- Indexes for dumped tables
